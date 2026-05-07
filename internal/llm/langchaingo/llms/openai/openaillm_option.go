@@ -16,10 +16,9 @@ const (
 type APIType openaiclient.APIType
 
 const (
-	APITypeOpenAI          APIType = APIType(openaiclient.APITypeOpenAI)
-	APITypeAzure                   = APIType(openaiclient.APITypeAzure)
-	APITypeAzureAD                 = APIType(openaiclient.APITypeAzureAD)
-	APITypeAzureDataBricks         = APIType(openaiclient.APITypeAzureDataBricks)
+	APITypeOpenAI  APIType = APIType(openaiclient.APITypeOpenAI)
+	APITypeAzure           = APIType(openaiclient.APITypeAzure)
+	APITypeAzureAD         = APIType(openaiclient.APITypeAzureAD)
 )
 
 const (

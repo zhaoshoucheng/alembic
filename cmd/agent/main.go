@@ -28,13 +28,7 @@ func main() {
 	// 2. 各 domain 模块独立 Init，按依赖顺序：
 	account.Init(ctx)
 
-	if err := llm.Init(ctx); err != nil {
-		log.Fatalf("init llm: %v", err)
-	}
-
-	if len(llm.Default().Accounts()) == 0 {
-		log.Fatalf("no accounts loaded")
-	}
+	llm.Init()
 
 	// 3. 调一次模型：根据 model 名路由账号 → 建 client → GenerateContent。
 	resp, err := llm.Default().GenerateContent(ctx, *model, []llms.MessageContent{

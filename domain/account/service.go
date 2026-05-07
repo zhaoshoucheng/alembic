@@ -103,7 +103,7 @@ func (s *Service) PickAccountForModel(model string) (*Account, error) {
 		if err != nil {
 			continue
 		}
-		if acc.Provider == want {
+		if acc.Name == model {
 			return acc, nil
 		}
 	}
