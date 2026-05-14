@@ -5,11 +5,14 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/shoucheng/my-first-agent/domain/account"
 	"github.com/shoucheng/my-first-agent/domain/llm"
 	"github.com/shoucheng/my-first-agent/infra/config"
-	"github.com/shoucheng/my-first-agent/internal/llm/langchaingo/llms"
+	"github.com/shoucheng/my-first-agent/internal/tools/builtin"
+	"github.com/shoucheng/my-first-agent/internal/tools/sandbox"
+	"github.com/shoucheng/my-first-agent/pkg/types"
 )
 
 func main() {
@@ -20,28 +23,35 @@ func main() {
 
 	ctx := context.Background()
 
-	// 1. 读 yaml 配置（infra），存入全局单例。
 	if err := config.Init(*cfgPath); err != nil {
 		log.Fatalf("init config: %v", err)
 	}
 
-	// 2. 各 domain 模块独立 Init，按依赖顺序：
 	account.Init(ctx)
-
 	llm.Init()
 
-	// 3. 调一次模型：根据 model 名路由账号 → 建 client → GenerateContent。
-	resp, err := llm.Default().GenerateContent(ctx, *model, []llms.MessageContent{
-		{
-			Role:  llms.ChatMessageTypeHuman,
-			Parts: []llms.ContentPart{llms.TextContent{Text: *prompt}},
-		},
-	})
+	settings := config.GetConfig()
+	agentConfig := types.AgentConfig{MaxIterations: 10, Verbose: true}
+	if settings != nil {
+		agentConfig.MaxIterations = settings.Agent.MaxIterations
+		agentConfig.Verbose = settings.Agent.Verbose
+	}
+
+	workDir, _ := os.Getwd()
+	sb := sandbox.NewLocalSandbox(workDir)
+	toolRegistry, err := builtin.NewBuiltinRegistry(sb)
 	if err != nil {
-		log.Fatalf("generate: %v", err)
+		log.Fatalf("init tools: %v", err)
 	}
-	if len(resp.Choices) == 0 {
-		log.Fatalf("empty response")
+
+	myAgent, err := NewAgent(llm.Default(), *model, toolRegistry, agentConfig)
+	if err != nil {
+		log.Fatalf("init agent: %v", err)
 	}
-	fmt.Println(resp.Choices[0].Content)
+
+	resp, err := myAgent.Run(ctx, *prompt)
+	if err != nil {
+		log.Fatalf("run agent: %v", err)
+	}
+	fmt.Println(resp)
 }

@@ -14,7 +14,6 @@ type Settings struct {
 	LLM     LLMSettings     `yaml:"llm"     json:"llm"`
 	Agent   AgentSettings   `yaml:"agent"   json:"agent"`
 	Memory  MemorySettings  `yaml:"memory"  json:"memory"`
-	Tools   ToolsSettings   `yaml:"tools"   json:"tools"`
 	Logging LoggingSettings `yaml:"logging" json:"logging"`
 }
 
@@ -83,18 +82,6 @@ type AgentSettings struct {
 type MemorySettings struct {
 	Type    string `yaml:"type"     json:"type"` // buffer | summary | vector
 	MaxSize int    `yaml:"max_size" json:"max_size"`
-}
-
-// ToolsSettings 对应 config.yaml 中的 tools 段。
-type ToolsSettings struct {
-	Enabled []string            `yaml:"enabled" json:"enabled"`
-	Search  ToolsSearchSettings `yaml:"search"  json:"search"`
-}
-
-// ToolsSearchSettings 搜索工具的配置。
-type ToolsSearchSettings struct {
-	Provider   string `yaml:"provider"    json:"provider"` // google | bing
-	MaxResults int    `yaml:"max_results" json:"max_results"`
 }
 
 // LoggingSettings 对应 config.yaml 中的 logging 段。
