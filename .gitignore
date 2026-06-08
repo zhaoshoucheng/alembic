@@ -6,7 +6,8 @@
 *.dylib
 bin/
 dist/
-agent
+# 编译产物二进制（注意：不能写成裸 `agent`，否则会连 cmd/agent/ 整个目录一起忽略）
+/cmd/agent/agent
 
 # Test binary, built with `go test -c`
 *.test
@@ -26,6 +27,9 @@ go.work
 .env
 *.env
 !.env.example
+
+# Local-only notes (含本地路径/品牌字眼，禁止入库)
+.claude/local-notes.md
 
 # IDE
 .vscode/
