@@ -12,9 +12,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 这是什么项目 / 进展在哪
 
-探索性学习项目：用 Go 逐个模块重写参考工程 `agent-server` 的核心思路。
+**Alembic**（炼金蒸馏器，slogan：*distill the essence of every agent*）：用 Go 萃取
+各种参考工程（如 `agent-server`）的核心思路，做一个能"吸收、提炼别的 agent、取长补短"的
+**本地、单用户、单可执行文件的终端 agent**（形态对标 Claude Code）。
 **项目说明、模块地图、当前进展、roadmap 全在 [`docs/progress/`](docs/progress/README.md)**——
 开新会话先读那里。完成模块后同步更新 `docs/progress/status.md` 和下面的 Architecture。
+
+## 纲领（决定取舍的总开关）
+
+详见 [`docs/progress/principles.md`](docs/progress/principles.md)。要点：
+
+- **只做 agent 的本质复杂度**：B 模型层 / C 工具层 / D Agent 核心（思考、工具、记忆、
+  鲁棒性、提示词）。
+- **明确砍掉附带复杂度**：E 会话调度 / F 服务端（多租户、WebSocket、worker 分发、
+  鉴权…）——对终端单文件目标无用，不做。
+- **Claude 的义务**：当用户要做 E/F 类工作、或有更聚焦本质的更小做法时，**主动提醒**
+  "这偏离了'只做 agent 本质'的纲领"。引入新参考项目时，先按"萃取四步"分层再动手。
 
 ## Project Overview
 
