@@ -1,4 +1,4 @@
-# My First Agent
+# Alembic
 
 一个基于 Go 语言的智能体（Agent）框架，借鉴了 LangChain 和 ReAct 等流行框架的设计理念。
 
@@ -13,7 +13,7 @@
 ## 项目结构
 
 ```
-my-first-agent/
+alembic/
 ├── cmd/                    # 应用程序入口
 │   └── agent/             # 主程序
 ├── internal/              # 内部包
